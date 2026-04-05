@@ -1,7 +1,5 @@
-<<<<<<< HEAD
 fastapi==0.115.0
 uvicorn[standard]==0.30.0
-=======
-fastapi==0.115.0
-uvicorn[standard]==0.30.0
->>>>>>> 0c3308b98a7ca75deb92fa04b6ef260884d03cf5
+scikit-learn
+numpy
+pydantic
