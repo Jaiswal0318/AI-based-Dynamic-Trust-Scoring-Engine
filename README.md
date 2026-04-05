@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 ## AI-Based Dynamic Trust Scoring Engine for Zero Trust Networks
 
 This project is a minimal **reference implementation** of an AI-based dynamic trust
