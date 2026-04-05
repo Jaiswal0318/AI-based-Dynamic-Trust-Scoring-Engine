@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AI-Based Dynamic Trust Scoring Engine - Zero Trust Dashboard</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="topbar__inner">
+        <div class="brand">
+          <div class="brand__dot"></div>
+          <div>
+            <div class="brand__title">AI-Based Dynamic Trust Scoring Engine</div>
+            <div class="brand__subtitle">Zero Trust Dashboard</div>
+          </div>
+        </div>
+        <div class="topbar__right">
+          <div class="status">
+            <span class="status__pill" id="healthPill">Checking…</span>
+          </div>
+          <button class="theme-toggle" id="themeToggle" type="button">
+            Dark mode
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="cards">
+        <div class="card">
+          <div class="card__icon card__icon--blue">🖥️</div>
+          <div class="card__label">Active Sessions</div>
+          <div class="card__value" id="activeSessions">0</div>
+        </div>
+        <div class="card">
+          <div class="card__icon card__icon--red">🔴</div>
+          <div class="card__label">High Risk Users</div>
+          <div class="card__value card__value--danger" id="highRiskUsers">0</div>
+        </div>
+        <div class="card">
+          <div class="card__icon card__icon--green">📈</div>
+          <div class="card__label">Average Trust Score</div>
+          <div class="card__value card__value--ok" id="avgTrust">0</div>
+        </div>
+        <div class="card">
+          <div class="card__icon card__icon--red">🔴</div>
+          <div class="card__label">Blocked Attempts</div>
+          <div class="card__value card__value--danger" id="blockedAttempts">0</div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel__title">Live User Sessions</div>
+        <div class="tablewrap">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>User ID</th>
+                <th>Location</th>
+                <th>Device</th>
+                <th>Trust Score</th>
+                <th>Risk Level</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="sessionsBody"></tbody>
+          </table>
+        </div>
+        <div class="panel__footer">
+          <div class="muted">Showing latest decisions from the engine.</div>
+        </div>
+      </section>
+
+      <section class="grid2">
+        <section class="panel">
+          <div class="panel__title">Trust Score Breakdown</div>
+          <div class="breakdown">
+            <div class="breakdown__chart">
+              <canvas id="donutChart" width="260" height="260"></canvas>
+              <div class="gauge">
+                <div class="gauge__label">Trust Score</div>
+                <div class="gauge__value" id="trustGauge">0</div>
+              </div>
+            </div>
+            <div class="breakdown__list" id="breakdownList"></div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel__title">Adjust Risk Weights</div>
+          <div class="sliders">
+            <div class="slider">
+              <div class="slider__row">
+                <div class="slider__label">Location Weight</div>
+                <div class="slider__value" id="w_location_risk">0%</div>
+              </div>
+              <input type="range" min="0" max="100" value="15" id="s_location_risk" />
+            </div>
+            <div class="slider">
+              <div class="slider__row">
+                <div class="slider__label">Device Weight</div>
+                <div class="slider__value" id="w_device_risk">0%</div>
+              </div>
+              <input type="range" min="0" max="100" value="25" id="s_device_risk" />
+            </div>
+            <div class="slider">
+              <div class="slider__row">
+                <div class="slider__label">Time Weight</div>
+                <div class="slider__value" id="w_time_of_day_norm">0%</div>
+              </div>
+              <input type="range" min="0" max="100" value="10" id="s_time_of_day_norm" />
+            </div>
+            <div class="slider">
+              <div class="slider__row">
+                <div class="slider__label">Behavior Weight</div>
+                <div class="slider__value" id="w_behavior_risk">0%</div>
+              </div>
+              <input type="range" min="0" max="100" value="15" id="s_behavior_risk" />
+            </div>
+
+            <div class="actions">
+              <button class="btn" id="applyWeights">Apply Weights</button>
+              <button class="btn btn--ghost" id="resetWeights">Reset</button>
+              <div class="muted" id="weightsMsg"></div>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <section class="panel">
+        <div class="panel__title">Alert Logs</div>
+        <div class="tablewrap">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Time (UTC)</th>
+                <th>User ID</th>
+                <th>Trigger Event</th>
+                <th>Action</th>
+                <th>Engine Confidence</th>
+              </tr>
+            </thead>
+            <tbody id="alertsBody"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <script src="/static/app.js"></script>
+  </body>
+</html>
+
