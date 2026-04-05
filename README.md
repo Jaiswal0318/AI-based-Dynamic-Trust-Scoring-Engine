@@ -1,132 +1,45 @@
-## AI-Based Dynamic Trust Scoring Engine for Zero Trust Networks
+# 🚀 AI-Based Dynamic Trust Scoring Engine
 
-This project is a minimal **reference implementation** of an AI-based dynamic trust
-scoring engine suitable for Zero Trust Network architectures.
+### 🔐 Zero Trust | 🤖 AI-Powered Security | ⚡ FastAPI
 
-It exposes a **FastAPI** service that ingests contextual risk signals about a user,
-device, and resource, and returns:
-
-- **trust_score**: continuous value in \[0, 1\] (higher = more trusted)
-- **decision**: `allow`, `challenge`, or `deny`
-- **reasons**: human-readable explanations of the decision
-
-The trust score itself is produced by a small **Logistic Regression** model
-(`scikit-learn`) trained on synthetic data that mimics typical Zero Trust risk
-patterns (user risk, device posture, anomalous behavior, time-of-day, past
-incidents, and resource sensitivity).
+An intelligent **AI-driven trust scoring engine** designed for **Zero Trust Network Architectures (ZTNA)**.
+It dynamically evaluates access requests using contextual risk signals and machine learning.
 
 ---
 
-### 1. Problem Statement
+## ✨ Key Features
 
-In a Zero Trust Network, no user or device is inherently trusted, even if they
-are inside the network perimeter. Every access request should be **continuously
-evaluated** using up-to-date contextual signals.
-
-The goal of this engine is to:
-
-- **Aggregate multiple risk signals** about user, device, network, and behavior.
-- **Compute a dynamic trust score** using a machine-learning model.
-- **Map the trust score to a decision** (`allow` / `challenge` / `deny`) according
-  to configurable thresholds.
-- **Explain the decision** in human-readable terms for audit and tuning.
+* 🔍 **Dynamic Trust Scoring** (0 → 1 scale)
+* 🤖 **ML-Based Decision Engine** (Logistic Regression)
+* ⚖️ **Policy-Based Access Control** (`allow` / `challenge` / `deny`)
+* 🧠 **Explainable AI Output** (human-readable reasons)
+* ⚡ **FastAPI Backend with Real-Time API**
+* 🔐 **API Key Security Layer**
 
 ---
 
-### 2. High-Level Design
+## 🧠 How It Works
 
-- **API Layer**: FastAPI application (`app/main.py`) exposing:
-  - `GET /health` – health check.
-  - `POST /score` – computes trust score and decision for a given `AccessContext`.
-- **Schema Layer**: Pydantic models (`app/schemas.py`) defining:
-  - `AccessContext` – input signals.
-  - `TrustScoreResponse` – output.
-- **Model Layer**: `DynamicTrustModel` (`app/model.py`):
-  - Trains a Logistic Regression model on synthetic risk data at startup.
-  - Encodes request context into model features.
-  - Produces a trust score and an approximate feature contribution breakdown.
-- **Policy Layer**:
-  - Simple thresholds convert the trust score into `allow` / `challenge` / `deny`.
+1. Collect contextual signals (user, device, behavior, network)
+2. Convert signals into feature vectors
+3. Apply ML model to compute **trust score**
+4. Map score → access decision
+5. Return explanation for transparency
 
 ---
 
-### 3. Local Setup (without Docker)
-
-From your project root (`AI-Based Dynamic Search`):
+## 🏗️ Architecture
 
 ```bash
-python -m venv .venv
-.venv\Scripts\activate  # On Windows PowerShell: .venv\Scripts\Activate.ps1
-
-pip install --upgrade pip
-pip install -r requirements.txt
-
-python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+app/
+ ├── main.py        # FastAPI endpoints
+ ├── schemas.py     # Request/Response models
+ ├── model.py       # ML trust scoring logic
 ```
-
-The API will be available at `http://localhost:8000`.
-
-You can open automatic interactive docs at:
-
-- Swagger UI: `http://localhost:8000/docs`
-- ReDoc: `http://localhost:8000/redoc`
-
-You can also open the **Zero Trust Dashboard UI** at:
-
-- Dashboard: `http://localhost:8000/`
 
 ---
 
-### 4. Security (API key)
-
-All JSON APIs except `/` and `/health` are protected with a simple **API key**:
-
-- **Default API key**: `zt-demo-key`
-- **Header name**: `X-API-Key`
-
-You can override the key via environment variable before starting the server:
-
-```bash
-set ZT_API_KEY=your-strong-key-here   # PowerShell: $env:ZT_API_KEY="your-strong-key-here"
-python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
-```
-
-Example request with API key:
-
-```bash
-curl -X POST "http://localhost:8000/score" ^
-  -H "X-API-Key: zt-demo-key" ^
-  -H "Content-Type: application/json" ^
-  -d "{ ...body... }"
-```
-
-The dashboard frontend automatically sends this header for its own calls.
-
----
-
-### 5. Example Request
-
-Send a request to the `/score` endpoint using `curl` or any HTTP client:
-
-```bash
-curl -X POST "http://localhost:8000/score" ^
-  -H "Content-Type: application/json" ^
-  -d "{
-    \"user_id\": \"alice\",
-    \"device_id\": \"laptop-123\",
-    \"resource_id\": \"prod-db\",
-    \"user_risk\": 0.2,
-    \"device_risk\": 0.3,
-    \"location_risk\": 0.2,
-    \"network_risk\": 0.3,
-    \"behavior_risk\": 0.4,
-    \"time_of_day\": 10,
-    \"past_incidents\": 0,
-    \"sensitive_resource\": true
-  }"
-```
-
-Typical JSON response:
+## 📊 Sample Output
 
 ```json
 {
@@ -134,46 +47,90 @@ Typical JSON response:
   "decision": "allow",
   "reasons": [
     "Trust score is high enough to allow access.",
-    "Target resource is sensitive, applying stricter thresholds.",
-    "Top influencing factors (approximate): behavior_risk=-0.123, device_risk=-0.087, user_risk=-0.075."
+    "Sensitive resource triggered stricter thresholds.",
+    "Top factors: behavior_risk, device_risk, user_risk."
   ]
 }
 ```
 
-> Note: Exact numbers will vary because the model uses dynamic scoring.
-
 ---
 
-### 6. Docker-Based Deployment
-
-You can containerize and run the service using the provided `Dockerfile`.
-
-From the project root:
+## 🚀 Getting Started
 
 ```bash
-docker build -t dynamic-trust-engine .
-docker run --rm -p 8000:8000 dynamic-trust-engine
-```
+git clone https://github.com/Jaiswal0318/AI-based-Dynamic-Trust-Scoring-Engine.git
+cd AI-based-Dynamic-Trust-Scoring-Engine
 
-The API will again be accessible at `http://localhost:8000`.
+python -m venv .venv
+.venv\Scripts\activate
+
+pip install -r requirements.txt
+uvicorn app.main:app --reload
+```
 
 ---
 
-### 7. Integration in a Zero Trust Architecture
+## 🔐 API Security
 
-In a larger Zero Trust system, this engine would typically be invoked:
+* Header: `X-API-Key`
+* Default: `zt-demo-key`
 
-- By an **Identity Provider (IdP)** or **Access Proxy** whenever a user tries to
-  access a protected resource.
-- With features populated from:
-  - Identity & UEBA systems (`user_risk`, `behavior_risk`).
-  - Endpoint management / EDR (`device_risk`).
-  - Network telemetry (`location_risk`, `network_risk`).
-  - Policy store / inventory (`sensitive_resource`).
+```bash
+curl -X POST http://localhost:8000/score \
+-H "X-API-Key: zt-demo-key" \
+-H "Content-Type: application/json"
+```
 
-Based on the returned `decision`, the caller can:
+---
 
-- **allow**: grant access.
-- **challenge**: trigger MFA or step-up verification.
-- **deny**: block access and optionally open an incident.
+## 🐳 Docker Deployment
 
+```bash
+docker build -t trust-engine .
+docker run -p 8000:8000 trust-engine
+```
+
+---
+
+## 🌍 Real-World Use Case
+
+This engine can integrate with:
+
+* Identity Providers (IdP)
+* Endpoint Detection Systems (EDR)
+* Network Monitoring Tools
+* Zero Trust Access Proxies
+
+---
+
+## 🔮 Future Enhancements
+
+* 🧠 Deep Learning-based scoring
+* 📊 React Dashboard (visual insights)
+* ☁️ Cloud deployment (AWS / GCP)
+* 🔄 Real-time streaming risk updates
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Feel free to fork and submit PRs.
+
+---
+
+## 📜 Code of Conduct
+
+Please follow the Code of Conduct for a positive community.
+
+---
+
+## ⭐ Show Your Support
+
+If you found this useful, give it a ⭐ on GitHub!
+
+---
+
+## 🔥 Why This Project Matters
+
+Zero Trust is the future of cybersecurity.
+This project demonstrates how **AI + Security + Backend Engineering** can work together in real-world systems.
