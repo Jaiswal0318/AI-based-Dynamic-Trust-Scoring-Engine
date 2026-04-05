@@ -293,6 +293,15 @@ This engine can integrate with:
 
 ---
 
+## 🚀 Featured Project
+
+🔐 AI-Based Dynamic Trust Scoring Engine
+→ Live: https://trust-scoring-engine.onrender.com/docs
+→ FastAPI + Machine Learning
+→ Zero Trust Security Model
+
+---
+
 ## 🤝 Contributing
 
 Contributions are welcome! Feel free to fork and submit PRs.
